@@ -6,10 +6,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Railway DB (preferred)
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg2://postgres:009988@localhost:5432/Qurantracker")
+# Railway DB (preferred / internal)
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", 
+    "postgresql+psycopg2://postgres:ioyyZhmTWeAuEJOedjKOntPekUSwILcH@postgres.railway.internal:5432/railway"
+)
 
-# Local (keep commented if you want to swap easily)
+# Local (keep commented, don't remove)
 # DATABASE_URL = "postgresql+psycopg2://postgres:009988@localhost:5432/Qurantracker"
 
 engine = create_engine(DATABASE_URL)
