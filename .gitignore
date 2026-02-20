@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+
+# Environments
+.env
+.env.*
+venv/
+.venv/
+ENV/
+env/
+
+# Logs
+*.log
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Tests / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Local databases / sqlite (if any)
+*.sqlite3
+
+# Credentials / keys
+*.pem
+*.key
+*.crt

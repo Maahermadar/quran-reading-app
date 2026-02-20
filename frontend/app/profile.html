@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Qur'an Tracker - Profile</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#14522d",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#131f18",
+                    },
+                    fontFamily: {
+                        "sans": ["Montserrat", "sans-serif"],
+                        "amiri": ["Amiri", "serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b border-primary/10">
+        <h1 class="text-2xl font-bold text-primary dark:text-primary/90">Profile</h1>
+        <!-- Tailwind Safelist for Dynamic Nav -->
+        <div class="hidden uppercase font-bold font-semibold tracking-widest text-primary text-slate-400 w-1.5 h-1.5">
+        </div>
+        <button class="p-2 rounded-full hover:bg-primary/10 transition-colors">
+            <span class="material-symbols-outlined text-primary">settings</span>
+        </button>
+    </header>
+    <!-- Main Content -->
+    <main class="flex-1 px-6 py-8 pb-32 max-w-md mx-auto w-full">
+        <!-- User Identity Section -->
+        <div class="flex flex-col items-center mb-10">
+            <div class="relative mb-4 group">
+                <div id="profile-avatar-display"
+                    class="w-28 h-28 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary/20 overflow-hidden shadow-sm relative">
+                    <!-- Dynamic Profile Avatar -->
+                    <span id="user-avatar-initial" class="text-4xl font-bold text-primary">A</span>
+
+                    <!-- Loading Overlay -->
+                    <div id="avatar-loading"
+                        class="absolute inset-0 bg-white/60 dark:bg-slate-900/60 backdrop-blur-[2px] flex items-center justify-center pointer-events-none transition-opacity"
+                        style="opacity:0;">
+                        <div class="size-6 border-2 border-primary border-t-transparent rounded-full animate-spin">
+                        </div>
+                    </div>
+                </div>
+                <!-- Pen Icon Overlay -->
+                <label for="avatar-input"
+                    class="absolute bottom-1 right-1 bg-primary text-white p-1.5 rounded-full border-2 border-background-light shadow-md cursor-pointer hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-sm block">edit</span>
+                    <input type="file" id="avatar-input" class="hidden" accept="image/jpeg,image/png,image/webp">
+                </label>
+            </div>
+            <h2 id="user-name-text" class="text-xl font-bold font-sans">User</h2>
+            <p id="user-email-text" class="text-slate-500 dark:text-slate-400 text-sm">user@example.com</p>
+        </div>
+        <!-- Settings List Container -->
+        <div class="space-y-2">
+            <h3 class="text-sm font-semibold text-primary/70 uppercase tracking-wider px-2 mb-3">General Settings</h3>
+            <a class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl hover:bg-primary/5 transition-colors border border-primary/5"
+                href="#">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">notifications</span>
+                    </div>
+                    <span class="font-medium">Notifications</span>
+                </div>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+            <a class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl hover:bg-primary/5 transition-colors border border-primary/5"
+                href="#">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">lock</span>
+                    </div>
+                    <span class="font-medium">Account Privacy</span>
+                </div>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+            <a class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl hover:bg-primary/5 transition-colors border border-primary/5"
+                href="#">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">help</span>
+                    </div>
+                    <span class="font-medium">Help &amp; Support</span>
+                </div>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+        </div>
+        <!-- Action Section -->
+        <div class="mt-10 px-2">
+            <button id="logout-btn"
+                class="w-full py-4 rounded-xl border-2 border-primary/20 text-primary font-bold hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">logout</span>
+                Logout
+            </button>
+            <p class="text-center text-xs text-slate-400 mt-6">Version 2.4.0 • Built with devotion</p>
+        </div>
+    </main>
+    <script src="../assets/js/auth-check.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/ui.js"></script>
+    <script src="../assets/js/nav-component.js"></script>
+    <script src="../assets/js/profile.js"></script>
+</body>
+
+</html>

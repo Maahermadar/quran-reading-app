@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Qur’an Reading Tracker - Register</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#14522d",
+                        "background-light": "#fafafa",
+                        "background-dark": "#131f18",
+                    },
+                    fontFamily: {
+                        "sans": ["Montserrat", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
+    <div class="flex-1 flex flex-col items-center justify-center px-6 py-12">
+        <!-- Logo / Branding Section -->
+        <div class="mb-10 text-center">
+            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-symbols-outlined text-primary text-4xl"
+                    style="font-variation-settings: 'FILL' 1">menu_book</span>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 mb-2">Qur’an Reading Tracker
+            </h1>
+            <p class="text-slate-500 dark:text-slate-400 font-medium">Start your journey.</p>
+        </div>
+        <!-- Registration Card -->
+        <div
+            class="w-full max-w-md bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 p-8">
+            <form id="register-form" class="space-y-5">
+                <!-- Full Name Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 ml-1"
+                        for="name">Full Name</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-slate-400 text-xl">person</span>
+                        </div>
+                        <input
+                            class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary transition-all duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm"
+                            id="name" name="name" placeholder="Abdullah" type="text" required />
+                    </div>
+                </div>
+                <!-- Email Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 ml-1"
+                        for="email">Email</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-slate-400 text-xl">mail</span>
+                        </div>
+                        <input
+                            class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary transition-all duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm"
+                            id="email" name="email" placeholder="abdullah@example.com" type="email" required />
+                    </div>
+                </div>
+
+                <!-- Email Field -->
+
+                <!-- Password Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 ml-1"
+                        for="password">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-slate-400 text-xl">lock</span>
+                        </div>
+                        <input
+                            class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary transition-all duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm"
+                            id="password" name="password" placeholder="••••••••" type="password" />
+                    </div>
+                </div>
+                <!-- Create Account Button -->
+                <button
+                    class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200 mt-4 shadow-md shadow-primary/20"
+                    type="submit">
+                    Create Account
+                </button>
+            </form>
+        </div>
+        <!-- Footer Link -->
+        <p class="mt-10 text-center text-slate-600 dark:text-slate-400">
+            Already have an account?
+            <a class="text-primary font-bold hover:underline ml-1" href="login.html">Login</a>
+        </p>
+    </div>
+    <!-- Bottom Navigation Component Wrapper -->
+    <div class="mt-auto w-full max-w-md mx-auto">
+        <div
+            class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pb-3 pt-2 w-full">
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+                href="#">
+                <div class="flex h-8 items-center justify-center">
+                    <span class="material-symbols-outlined">home</span>
+                </div>
+            </a>
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+                href="#">
+                <div class="flex h-8 items-center justify-center">
+                    <span class="material-symbols-outlined">menu_book</span>
+                </div>
+            </a>
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+                <div class="flex h-8 items-center justify-center">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">person</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Qur’an Reading Tracker - Insights</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#14522d",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#131f18",
+                    },
+                    fontFamily: {
+                        "sans": ["Montserrat", "sans-serif"],
+                        "serif-amiri": ["Amiri", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex justify-between items-center border-b border-primary/10">
+        <h1 class="text-3xl font-bold text-primary dark:text-slate-100">Insights</h1>
+        <!-- Tailwind Safelist for Dynamic Nav -->
+        <div class="hidden uppercase font-bold font-semibold tracking-widest text-primary text-slate-400 w-1.5 h-1.5">
+        </div>
+        <div
+            class="js-avatar size-10 rounded-full border-2 border-primary/20 overflow-hidden bg-white flex items-center justify-center">
+            <svg class="w-6 h-6 text-primary/40" fill="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+        </div>
+    </header>
+    <main class="flex-1 px-6 pb-32">
+        <!-- Chart Section -->
+        <section class="mt-6">
+            <h2 class="text-lg font-bold mb-4 text-slate-800 dark:text-slate-200">Pages Read Per Day</h2>
+            <div class="bg-white dark:bg-slate-900/50 rounded-xl p-6 shadow-sm border border-primary/5">
+                <div class="space-y-6">
+                    <div id="weekly-chart-container" class="grid grid-cols-7 gap-1">
+                        <!-- Bars injected by JS -->
+                        <div class="flex flex-col items-center py-3 bg-primary/5 rounded-lg animate-pulse">
+                            <span class="text-[10px] font-medium text-slate-400 uppercase mb-1">...</span>
+                            <span class="text-sm font-bold text-slate-400">-</span>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                        <p class="text-sm text-slate-500">Weekly Total</p>
+                        <p class="text-xl font-bold text-primary"><span id="weekly-total-text">0</span> <span
+                                class="text-xs font-normal text-slate-400">pages</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Stats Grid -->
+        <section class="mt-8">
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Average Pages -->
+                <div class="bg-white dark:bg-slate-900/50 p-5 rounded-xl shadow-sm border border-primary/5">
+                    <span class="material-symbols-outlined text-primary mb-2 opacity-80">menu_book</span>
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-tight">Avg per Day</p>
+                    <p class="text-2xl font-bold text-primary dark:text-primary mt-1"><span id="avg-pages-text">0</span>
+                        <span class="text-sm font-normal text-slate-400">pgs</span>
+                    </p>
+                </div>
+                <!-- Current Streak -->
+                <div class="bg-white dark:bg-slate-900/50 p-5 rounded-xl shadow-sm border border-primary/5">
+                    <img src="../assets/images/fire_animation.gif" alt="streak fire"
+                        class="w-6 h-6 object-contain mb-2" />
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-tight">Current Streak</p>
+                    <p class="text-2xl font-bold text-primary dark:text-primary mt-1"><span
+                            id="current-streak-text">0</span> <span
+                            class="text-sm font-normal text-slate-400">days</span></p>
+                </div>
+                <!-- Estimated Days for 100 Pages -->
+                <div class="bg-white dark:bg-slate-900/50 p-5 rounded-xl shadow-sm border border-primary/5">
+                    <span class="material-symbols-outlined text-amber-500 mb-2">schedule</span>
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-tight">Next 100 Pgs</p>
+                    <p class="text-2xl font-bold text-primary dark:text-primary mt-1"><span
+                            id="est-days-text">N/A</span> <span class="text-sm font-normal text-slate-400">days</span>
+                    </p>
+                </div>
+                <!-- Best Time -->
+                <div class="bg-white dark:bg-slate-900/50 p-5 rounded-xl shadow-sm border border-primary/5">
+                    <span class="material-symbols-outlined text-blue-500 mb-2">light_mode</span>
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-tight">Best Time</p>
+                    <p id="best-time-text" class="text-lg font-bold text-primary dark:text-primary mt-1 leading-tight">
+                        Calc...</p>
+                </div>
+            </div>
+        </section>
+        <!-- Behavioral Insight Card -->
+        <section class="mt-8">
+            <h2 class="text-lg font-bold mb-4 text-slate-800 dark:text-slate-200">Personal Habit</h2>
+            <div class="bg-primary/5 dark:bg-primary/10 rounded-xl p-6 border border-primary/10 flex items-start gap-4">
+                <div class="bg-primary text-white p-2 rounded-lg">
+                    <span class="material-symbols-outlined">auto_awesome</span>
+                </div>
+                <div>
+                    <p id="personal-insight-text" class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                        Setting up your reading habits... Log more entries to see personalized patterns.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="../assets/js/auth-check.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/ui.js"></script>
+    <script src="../assets/js/nav-component.js"></script>
+    <script src="../assets/js/insights.js"></script>
+</body>
+
+</html>
