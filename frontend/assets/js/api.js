@@ -1,6 +1,6 @@
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:8000'
-    : 'https://quran-tracker-production.up.railway.app'; // THIS WILL BE UPDATED ONCE DEPLOYED
+    : 'https://quran-reading-app-production.up.railway.app'; // THIS WILL BE UPDATED ONCE DEPLOYED
 
 async function apiFetch(endpoint, options = {}) {
     const token = localStorage.getItem('token');
