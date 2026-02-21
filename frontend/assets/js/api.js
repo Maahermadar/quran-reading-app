@@ -33,10 +33,14 @@ const _apiCache = {
         } catch (e) { }
     },
     has: (key) => !!sessionStorage.getItem(`api_cache_${key}`),
-    clear: () => {
-        Object.keys(sessionStorage).forEach(key => {
-            if (key.startsWith('api_cache_')) sessionStorage.removeItem(key);
-        });
+    clear: (key) => {
+        if (key) {
+            sessionStorage.removeItem(`api_cache_${key}`);
+        } else {
+            Object.keys(sessionStorage).forEach(k => {
+                if (k.startsWith('api_cache_')) sessionStorage.removeItem(k);
+            });
+        }
     }
 };
 

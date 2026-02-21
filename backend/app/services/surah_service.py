@@ -1,5 +1,7 @@
-import json
-import os
+import logging
+
+# Setup logging
+logger = logging.getLogger("uvicorn.error")
 
 # Path to the dataset
 # Assuming it's in the root of the project (one level above 'backend')
@@ -12,14 +14,19 @@ def _load_data():
     if _data is None:
         if os.path.exists(DATASET_PATH):
             try:
+                # Log file size to verify it's not empty
+                file_size = os.path.getsize(DATASET_PATH)
+                logger.info(f"Loading Madani Mushaf data from {DATASET_PATH} ({file_size} bytes)")
+                
                 with open(DATASET_PATH, 'r', encoding='utf-8') as f:
                     _data = json.load(f)
-                print(f"Successfully loaded Madani Mushaf data from {DATASET_PATH}")
+                
+                logger.info(f"Successfully loaded {len(_data)} pages of Madani Mushaf data")
             except Exception as e:
-                print(f"ERROR: Failed to parse Madani Mushaf JSON: {e}")
+                logger.error(f"CRITICAL: Failed to parse Madani Mushaf JSON: {e}")
                 _data = []
         else:
-            print(f"ERROR: Madani Mushaf dataset NOT FOUND at {DATASET_PATH}")
+            logger.error(f"CRITICAL: Madani Mushaf dataset NOT FOUND at {DATASET_PATH}")
             _data = []
 
 def get_data_for_page(page: int):
@@ -27,12 +34,14 @@ def get_data_for_page(page: int):
     _load_data()
     
     # If _data is empty (failed to load), try one more time if it's the first real attempt
-    if not _data and os.path.exists(DATASET_PATH):
+    if (not _data or len(_data) == 0) and os.path.exists(DATASET_PATH):
         _load_data()
 
     # page is 1-indexed, index 0 is empty in the dataset
     if _data and 1 <= page < len(_data):
         return _data[page]
+    
+    logger.warning(f"No data found for page {page} (Dataset size: {len(_data) if _data else 0})")
     return None
 
 def get_surah_info_for_page(page: int):

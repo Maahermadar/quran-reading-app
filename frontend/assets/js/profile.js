@@ -100,6 +100,12 @@ async function handleAvatarUpload(e) {
 
         const data = await response.json();
 
+        // CLEAR CACHE: Force fresh data on next load
+        if (typeof _apiCache !== 'undefined') {
+            _apiCache.clear('/auth/me');
+            _apiCache.clear('/progress/');
+        }
+
         // Update profile avatar immediately
         applyAvatarToProfilePage({ avatar_url: data.avatar_url });
 
