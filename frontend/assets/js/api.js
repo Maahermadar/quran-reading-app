@@ -1,10 +1,18 @@
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:8000'
-    : 'https://quran-reading-app-production.up.railway.app';
+const ASSETS_BASE_URL = 'https://quran-reading-app.maahermadar.workers.dev';
 
-const ASSETS_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? '' // Local assets are served relative to the frontend root
-    : 'https://quran-reading-app.maahermadar.workers.dev';
+/**
+ * Resolves an avatar URL. 
+ * Prioritizes the Cloudflare worker path for production-ready assets.
+ */
+function getAvatarUrl(dbPath) {
+    if (!dbPath) return null;
+    // Extract filename without extension (e.g., "14" from "/static/avatars/14.jpg")
+    const filename = dbPath.split('/').pop();
+    const id = filename.split('.')[0];
+
+    // Always use Cloudflare for the frontend as requested
+    return `${ASSETS_BASE_URL}/assets/avatars/${id}.webp`;
+}
 
 // Simple in-memory cache to prevent flicker on tab switching
 // Persistent session cache to prevent flicker on tab switching in MPA

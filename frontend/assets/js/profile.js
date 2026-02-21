@@ -37,8 +37,7 @@ function applyAvatarToProfilePage(data) {
     if (!profileAvatar) return;
 
     if (data.avatar_url) {
-        const avatarId = data.avatar_url.split('/').pop().split('.')[0];
-        const cloudflareAvatarUrl = `${ASSETS_BASE_URL}/assets/avatars/${avatarId}.webp`;
+        const cloudflareAvatarUrl = getAvatarUrl(data.avatar_url);
 
         profileAvatar.style.backgroundImage = `url(${cloudflareAvatarUrl})`;
         profileAvatar.style.backgroundSize = 'cover';

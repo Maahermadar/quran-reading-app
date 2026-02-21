@@ -8,11 +8,7 @@ async function loadMeAndApplyAvatar() {
         const avatars = document.querySelectorAll('.js-avatar');
         avatars.forEach(avatar => {
             if (data.avatar_url) {
-                // Avatars are now served from Cloudflare Assets as .webp
-                // Original avatar_url is /static/avatars/{id}.{ext}
-                // We want {ASSETS_BASE_URL}/assets/avatars/{id}.webp
-                const avatarId = data.avatar_url.split('/').pop().split('.')[0];
-                const cloudflareAvatarUrl = `${ASSETS_BASE_URL}/assets/avatars/${avatarId}.webp`;
+                const cloudflareAvatarUrl = getAvatarUrl(data.avatar_url);
 
                 // Top nav avatars should NOT be lazy loaded
                 avatar.innerHTML = `<img src="${cloudflareAvatarUrl}" 

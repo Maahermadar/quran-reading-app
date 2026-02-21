@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qur'an Tracker</title>
+    <script>
+        // Entry point router: instantly directs user to home or login
+        (function () {
+            const token = localStorage.getItem('token');
+            if (token) {
+                window.location.replace('app/home.html');
+            } else {
+                window.location.replace('app/login.html');
+            }
+        })();
+    </script>
+    <style>
+        body {
+            background: #f6f8f7;
+        }
+    </style>
+</head>
+
+<body>
+</body>
+
+</html>
