@@ -69,7 +69,7 @@ def get_last_page(
     if not last_log:
         return {"last_page": 1}
     
-    # If the user finished Exactly on page 600, the next cycle starts at page 1
+    # If the user finished Exactly on page 604, the next cycle starts at page 1
     if last_log.end_page == 604:
         return {"last_page": 1}
         
