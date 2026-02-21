@@ -11,7 +11,7 @@ from .routers import auth, logs, progress, goals, insights, tips
 app = FastAPI(title="Quran Reading Tracker API")
 
 ALLOWED_ORIGIN_PATTERN = re.compile(
-    r"^https://.*\.maahermadar\.workers\.dev$|^http://localhost(:\d+)?$|^http://127\.0\.0\.1(:\d+)?$"
+    r"^https://.*\.qurantracker\.workers\.dev$|^http://localhost(:\d+)?$|^http://127\.0\.0\.1(:\d+)?$"
 )
 
 class CORSHandlerMiddleware(BaseHTTPMiddleware):

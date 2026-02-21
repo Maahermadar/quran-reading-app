@@ -2,7 +2,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
     ? 'http://localhost:8000'
     : 'https://quran-reading-app-production.up.railway.app';
 
-const ASSETS_BASE_URL = 'https://quran-reading-app.maahermadar.workers.dev';
+const ASSETS_BASE_URL = 'https://quran-reading-app.qurantracker.workers.dev';
 
 console.log(`[API] Base URL: ${API_BASE_URL}`);
 console.log(`[API] Assets URL: ${ASSETS_BASE_URL}`);
