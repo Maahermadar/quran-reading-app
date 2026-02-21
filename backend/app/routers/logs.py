@@ -19,7 +19,7 @@ def create_reading_log(
     
     # Effective starting page for validation
     effective_start = 1
-    if last_log and current_user.is_cycle_completed == 0:
+    if last_log and not current_user.is_cycle_completed:
         effective_start = last_log.end_page
 
     if log_in.end_page < 1 or log_in.end_page > 604:
@@ -43,12 +43,12 @@ def create_reading_log(
     # Step 2 — Increment only if this is a completion AND not already counted
     if completed and new_log.completion_counted == 0:
         current_user.lifetime_completions += 1
-        current_user.is_cycle_completed = 1
+        current_user.is_cycle_completed = True
         new_log.completion_counted = 1  # Mark this log as counted — idempotency guard
 
     # Step 3 — If NOT a completion but previous cycle was completed, reset the flag
-    elif not completed and current_user.is_cycle_completed == 1:
-        current_user.is_cycle_completed = 0
+    elif not completed and current_user.is_cycle_completed:
+        current_user.is_cycle_completed = False
 
     db.commit()
     db.refresh(new_log)

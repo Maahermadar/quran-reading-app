@@ -28,7 +28,7 @@ def register(user_in: schemas.UserCreate, db: Session = Depends(database.get_db)
             name=user_in.name,
             password_hash=hashed_password,
             lifetime_completions=0,
-            is_cycle_completed=0,
+            is_cycle_completed=False,
         )
         db.add(new_user)
         db.commit()

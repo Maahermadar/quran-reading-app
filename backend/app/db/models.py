@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, Enum, Float
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, Enum, Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 import enum
@@ -19,7 +19,7 @@ class User(Base):
     password_hash = Column(String)
     avatar_url = Column(String, nullable=True)
     lifetime_completions = Column(Integer, default=0)
-    is_cycle_completed = Column(Integer, default=0) # 0 or 1
+    is_cycle_completed = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     logs = relationship("ReadingLog", back_populates="user")
@@ -52,6 +52,6 @@ class LifetimeStat(Base):
     __tablename__ = "lifetime_stats"
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     total_completions = Column(Integer, default=0)
-    is_cycle_completed = Column(Integer, default=0) # Using Integer as BOOLEAN substitute if needed, but requested BOOLEAN. SQLAlchemy BOOLEAN usually works.
+    is_cycle_completed = Column(Boolean, default=False)
 
     user = relationship("User", back_populates="stats")
