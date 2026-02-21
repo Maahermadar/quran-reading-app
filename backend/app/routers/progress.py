@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from ..db import database, models
 from ..utils.deps import get_current_user
@@ -23,7 +24,7 @@ def get_progress(
     
     progress_pct = calc.calculate_progress_percentage(current_page)
     
-    return {
+    content = {
         "current_page": current_page,
         "juz": juz,
         "surah_name_en": surah_info["name_en"] if surah_info else "N/A",
@@ -33,3 +34,8 @@ def get_progress(
         "lifetime_completions": current_user.lifetime_completions,
         "is_cycle_completed": bool(current_user.is_cycle_completed)
     }
+    
+    response = JSONResponse(content=content)
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    return response

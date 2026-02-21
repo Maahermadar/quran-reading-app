@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from ..db import database, models, schemas
 from ..core import security
@@ -12,31 +13,34 @@ router = APIRouter()
 
 @router.post("/register", response_model=schemas.UserResponse)
 def register(user_in: schemas.UserCreate, db: Session = Depends(database.get_db)):
-    print(f"Registering user: {user_in.email}")
-    print(f"Password length: {len(user_in.password)}")
-    user = db.query(models.User).filter(models.User.email == user_in.email).first()
-    if user:
-        raise HTTPException(
-            status_code=400,
-            detail="The user with this email already exists in the system.",
+    print(f"[REGISTER] Attempting registration for: {user_in.email}")
+    try:
+        user = db.query(models.User).filter(models.User.email == user_in.email).first()
+        if user:
+            raise HTTPException(
+                status_code=400,
+                detail="An account with this email already exists.",
+            )
+        
+        hashed_password = security.get_password_hash(user_in.password)
+        new_user = models.User(
+            email=user_in.email,
+            name=user_in.name,
+            password_hash=hashed_password,
+            lifetime_completions=0,
+            is_cycle_completed=0,
         )
-    
-    hashed_password = security.get_password_hash(user_in.password)
-    new_user = models.User(
-        email=user_in.email,
-        name=user_in.name,
-        password_hash=hashed_password
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    # Initialize lifetime stats
-    stats = models.LifetimeStat(user_id=new_user.id, total_completions=0)
-    db.add(stats)
-    db.commit()
-    
-    return new_user
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        print(f"[REGISTER] Success - user id: {new_user.id}")
+        return new_user
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        print(f"[REGISTER] CRITICAL ERROR: {type(e).__name__}: {e}")
+        raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
 
 @router.post("/login", response_model=schemas.Token)
 def login(db: Session = Depends(database.get_db), form_data: OAuth2PasswordRequestForm = Depends()):
@@ -53,7 +57,19 @@ def login(db: Session = Depends(database.get_db), form_data: OAuth2PasswordReque
 
 @router.get("/me", response_model=schemas.UserResponse)
 def get_me(current_user: models.User = Depends(get_current_user)):
-    return current_user
+    # Add Cache-Control headers to prevent CDN or browser from caching user-specific responses
+    response = JSONResponse(content={
+        "id": current_user.id,
+        "email": current_user.email,
+        "name": current_user.name,
+        "avatar_url": current_user.avatar_url,
+        "lifetime_completions": current_user.lifetime_completions,
+        "is_cycle_completed": current_user.is_cycle_completed,
+        "created_at": current_user.created_at.isoformat(),
+    })
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    return response
 
 @router.post("/avatar")
 async def update_avatar(
