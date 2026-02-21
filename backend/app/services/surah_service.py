@@ -1,11 +1,13 @@
 import logging
+import json
+import os
 
 # Setup logging
 logger = logging.getLogger("uvicorn.error")
 
-# Path to the dataset
-# Assuming it's in the root of the project (one level above 'backend')
-DATASET_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "frontend", "assets", "data", "madani-muhsaf.json")
+# Path to the dataset - bundled INSIDE the backend/app/data/ folder
+# This ensures it's available in Railway (which only deploys the backend folder)
+DATASET_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "madani-muhsaf.json")
 
 _data = None
 
