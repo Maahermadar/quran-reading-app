@@ -12,21 +12,29 @@ _data = None
 def _load_data():
     global _data
     if _data is None:
+        abs_path = os.path.abspath(DATASET_PATH)
+        print(f"\n[SURAH SERVICE] Probing dataset at: {abs_path}")
+        
         if os.path.exists(DATASET_PATH):
             try:
-                # Log file size to verify it's not empty
                 file_size = os.path.getsize(DATASET_PATH)
-                logger.info(f"Loading Madani Mushaf data from {DATASET_PATH} ({file_size} bytes)")
+                print(f"[SURAH SERVICE] FOUND. Size: {file_size} bytes")
                 
                 with open(DATASET_PATH, 'r', encoding='utf-8') as f:
                     _data = json.load(f)
                 
-                logger.info(f"Successfully loaded {len(_data)} pages of Madani Mushaf data")
+                print(f"[SURAH SERVICE] LOAD SUCCESS. {len(_data)} pages ready.")
             except Exception as e:
-                logger.error(f"CRITICAL: Failed to parse Madani Mushaf JSON: {e}")
+                print(f"[SURAH SERVICE] CRITICAL PARSE ERROR at {abs_path}: {e}")
                 _data = []
         else:
-            logger.error(f"CRITICAL: Madani Mushaf dataset NOT FOUND at {DATASET_PATH}")
+            print(f"[SURAH SERVICE] CRITICAL ERROR: Dataset NOT FOUND at {abs_path}")
+            # Log the directory contents to help debug
+            parent_dir = os.path.dirname(DATASET_PATH)
+            if os.path.exists(parent_dir):
+                print(f"[SURAH SERVICE] Parent Dir Contents ({parent_dir}): {os.listdir(parent_dir)}")
+            else:
+                print(f"[SURAH SERVICE] Parent Dir DOES NOT EXIST: {parent_dir}")
             _data = []
 
 def get_data_for_page(page: int):
@@ -41,7 +49,7 @@ def get_data_for_page(page: int):
     if _data and 1 <= page < len(_data):
         return _data[page]
     
-    logger.warning(f"No data found for page {page} (Dataset size: {len(_data) if _data else 0})")
+    print(f"[SURAH SERVICE] WARNING: No data for page {page}. Dataset size: {len(_data) if _data else 0}")
     return None
 
 def get_surah_info_for_page(page: int):
@@ -58,11 +66,13 @@ def get_surah_info_for_page(page: int):
     first_surah_key = surah_keys[0]
     surah_data = page_data[first_surah_key]
     
-    return {
+    info = {
         "name_en": surah_data.get("titleEn"),
         "name_ar": f"سورة {surah_data.get('titleAr')}",
         "number": surah_data.get("chapterNumber")
     }
+    print(f"[SURAH SERVICE] Surah Info for Page {page}: {info['name_en']}")
+    return info
 
 def get_juz_for_page(page: int):
     page_data = get_data_for_page(page)

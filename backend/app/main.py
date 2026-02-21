@@ -18,11 +18,17 @@ app.mount("/static", StaticFiles(directory="uploads"), name="static")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origin_regex="https://.*\.maahermadar\.workers\.dev|http://localhost:.*|http://127\.0\.0\.1:.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup_event():
+    print("\n" + "="*50)
+    print("BACKEND STARTED - CORS CONFIGURED FOR CLOUDFLARE")
+    print("="*50 + "\n")
 
 # Create tables (for local dev without alembic first, but plan says use alembic)
 # models.Base.metadata.create_all(bind=database.engine)

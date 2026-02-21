@@ -4,6 +4,9 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
 
 const ASSETS_BASE_URL = 'https://quran-reading-app.maahermadar.workers.dev';
 
+console.log(`[API] Base URL: ${API_BASE_URL}`);
+console.log(`[API] Assets URL: ${ASSETS_BASE_URL}`);
+
 /**
  * Resolves an avatar URL. 
  * Prioritizes the Cloudflare worker path for production-ready assets.
