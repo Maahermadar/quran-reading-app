@@ -1,37 +1,57 @@
 import os
-from fastapi import FastAPI, Depends, HTTPException
+import re
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from sqlalchemy.orm import Session
+from fastapi.responses import Response
+from starlette.middleware.base import BaseHTTPMiddleware
 from .db import database, models
 from .routers import auth, logs, progress, goals, insights, tips
 
 app = FastAPI(title="Quran Reading Tracker API")
 
+ALLOWED_ORIGIN_PATTERN = re.compile(
+    r"^https://.*\.maahermadar\.workers\.dev$|^http://localhost(:\d+)?$|^http://127\.0\.0\.1(:\d+)?$"
+)
+
+class CORSHandlerMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        origin = request.headers.get("origin", "")
+        
+        # Handle preflight OPTIONS request
+        if request.method == "OPTIONS":
+            response = Response()
+            if ALLOWED_ORIGIN_PATTERN.match(origin):
+                response.headers["Access-Control-Allow-Origin"] = origin
+                response.headers["Access-Control-Allow-Credentials"] = "true"
+                response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+                response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, Accept"
+            return response
+        
+        response = await call_next(request)
+        
+        if ALLOWED_ORIGIN_PATTERN.match(origin):
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+            response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, Accept"
+        
+        return response
+
+app.add_middleware(CORSHandlerMiddleware)
+
 # Ensure upload directory exists
 UPLOAD_DIR = "uploads/avatars"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# Mount static files 
+# Mount static files
 app.mount("/static", StaticFiles(directory="uploads"), name="static")
-
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origin_regex="https://.*\.maahermadar\.workers\.dev|http://localhost:.*|http://127\.0\.0\.1:.*",
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 @app.on_event("startup")
 async def startup_event():
     print("\n" + "="*50)
-    print("BACKEND STARTED - CORS CONFIGURED FOR CLOUDFLARE")
+    print("BACKEND STARTED - CUSTOM CORS MIDDLEWARE ACTIVE")
     print("="*50 + "\n")
-
-# Create tables (for local dev without alembic first, but plan says use alembic)
-# models.Base.metadata.create_all(bind=database.engine)
 
 @app.get("/")
 async def root():

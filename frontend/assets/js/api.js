@@ -8,17 +8,15 @@ console.log(`[API] Base URL: ${API_BASE_URL}`);
 console.log(`[API] Assets URL: ${ASSETS_BASE_URL}`);
 
 /**
- * Resolves an avatar URL. 
- * Prioritizes the Cloudflare worker path for production-ready assets.
+ * Resolves an avatar URL.
+ * Avatars are stored on the backend server (Railway in prod, localhost in dev).
+ * They are NOT synced to Cloudflare, so we use API_BASE_URL directly.
  */
 function getAvatarUrl(dbPath) {
     if (!dbPath) return null;
-    // Extract filename without extension (e.g., "14" from "/static/avatars/14.jpg")
-    const filename = dbPath.split('/').pop();
-    const id = filename.split('.')[0];
-
-    // Always use Cloudflare for the frontend as requested
-    return `${ASSETS_BASE_URL}/assets/avatars/${id}.webp`;
+    // dbPath is something like "/static/avatars/17.jpg"
+    // Just prepend the API base URL to serve it from the backend
+    return `${API_BASE_URL}${dbPath}`;
 }
 
 // Simple in-memory cache to prevent flicker on tab switching
