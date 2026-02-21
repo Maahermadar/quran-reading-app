@@ -38,8 +38,19 @@ function applyAvatarToProfilePage(data) {
 
     if (data.avatar_url) {
         const cloudflareAvatarUrl = getAvatarUrl(data.avatar_url);
+        const localFallback = `${API_BASE_URL}${data.avatar_url}`;
 
-        profileAvatar.style.backgroundImage = `url(${cloudflareAvatarUrl})`;
+        // Create a temporary image to test if Cloudflare URL works
+        const img = new Image();
+        img.onload = () => {
+            profileAvatar.style.backgroundImage = `url(${cloudflareAvatarUrl})`;
+        };
+        img.onerror = () => {
+            console.log("Cloudflare avatar not ready, falling back to local");
+            profileAvatar.style.backgroundImage = `url(${localFallback})`;
+        };
+        img.src = cloudflareAvatarUrl;
+
         profileAvatar.style.backgroundSize = 'cover';
         profileAvatar.style.backgroundPosition = 'center';
         if (initial) initial.style.display = 'none';

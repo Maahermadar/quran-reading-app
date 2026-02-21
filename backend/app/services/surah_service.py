@@ -11,15 +11,27 @@ def _load_data():
     global _data
     if _data is None:
         if os.path.exists(DATASET_PATH):
-            with open(DATASET_PATH, 'r', encoding='utf-8') as f:
-                _data = json.load(f)
+            try:
+                with open(DATASET_PATH, 'r', encoding='utf-8') as f:
+                    _data = json.load(f)
+                print(f"Successfully loaded Madani Mushaf data from {DATASET_PATH}")
+            except Exception as e:
+                print(f"ERROR: Failed to parse Madani Mushaf JSON: {e}")
+                _data = []
         else:
+            print(f"ERROR: Madani Mushaf dataset NOT FOUND at {DATASET_PATH}")
             _data = []
 
 def get_data_for_page(page: int):
+    global _data
     _load_data()
+    
+    # If _data is empty (failed to load), try one more time if it's the first real attempt
+    if not _data and os.path.exists(DATASET_PATH):
+        _load_data()
+
     # page is 1-indexed, index 0 is empty in the dataset
-    if 1 <= page < len(_data):
+    if _data and 1 <= page < len(_data):
         return _data[page]
     return None
 
