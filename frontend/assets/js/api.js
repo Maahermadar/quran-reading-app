@@ -1,3 +1,7 @@
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8000'
+    : 'https://quran-reading-app-production.up.railway.app';
+
 const ASSETS_BASE_URL = 'https://quran-reading-app.maahermadar.workers.dev';
 
 /**
