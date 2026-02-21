@@ -39,9 +39,8 @@
 
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
   <!-- Header -->
-  <header
-    class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex justify-between items-center border-b border-primary/10">
-    <h1 class="text-3xl font-bold text-primary dark:text-slate-100 text-left">Tips</h1>
+  <header class="px-6 py-4 flex justify-between items-center mb-2">
+    <h1 class="text-xl font-extrabold text-slate-800 dark:text-slate-100">Tips & Growth</h1>
     <div
       class="js-avatar size-10 rounded-full border-2 border-primary/20 overflow-hidden bg-white flex items-center justify-center">
       <svg class="w-6 h-6 text-primary/40" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -50,6 +49,7 @@
       </svg>
     </div>
   </header>
+  <div class="mx-6 section-header-divider"></div>
   <main class="max-w-md mx-auto px-4 pt-6 space-y-8">
     <!-- Completion Estimate Section -->
     <section>
@@ -61,7 +61,9 @@
           </div>
           <div>
             <p class="text-xs font-medium uppercase tracking-wider text-primary/70">Current Forecast</p>
-            <p id="forecast-days-text" class="text-2xl font-bold text-primary dark:text-primary">Calculating...</p>
+            <p id="forecast-days-text"
+              class="text-2xl font-bold text-primary dark:text-primary skeleton-text whitespace-nowrap">
+              Calculating...</p>
           </div>
         </div>
         <div class="space-y-3">

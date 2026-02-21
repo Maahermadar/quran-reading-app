@@ -91,15 +91,25 @@
             <div class="flex justify-between items-start mb-4">
                 <div>
                     <h2 class="text-sm font-medium text-slate-500 uppercase tracking-wider">Current Progress</h2>
-                    <p id="current-juz-text" class="text-2xl font-bold text-primary dark:text-slate-100">Juz 1</p>
+                    <p id="current-juz-text"
+                        class="text-2xl font-bold text-primary dark:text-slate-100 skeleton-text w-24">Juz 1</p>
+                    <div class="flex flex-col mt-1">
+                        <span id="surah-name-en-text"
+                            class="text-sm font-bold text-slate-800 dark:text-slate-100 skeleton-text w-32">Surah</span>
+                        <span id="surah-name-ar-text"
+                            class="text-base font-bold font-amiri text-primary/80 dark:text-emerald-400 mt-1 skeleton-text w-24">سورة</span>
+                    </div>
                 </div>
                 <span id="progress-percentage-badge"
-                    class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">0% Done</span>
+                    class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold skeleton">0%
+                    Done</span>
             </div>
             <div class="space-y-3">
-                <div class="flex justify-between text-sm">
-                    <span id="pages-read-text" class="text-slate-600 dark:text-slate-400">Page 1 of 600</span>
-                    <span id="pages-left-text" class="text-slate-400">600 pages left</span>
+                <div class="flex justify-between text-sm items-center">
+                    <span id="pages-read-text"
+                        class="text-slate-600 dark:text-slate-400 skeleton-text whitespace-nowrap">Page 1 of 600</span>
+                    <span id="pages-left-text" class="text-slate-400 skeleton-text whitespace-nowrap">600 pages
+                        left</span>
                 </div>
                 <div class="w-full h-3 bg-accent-soft dark:bg-slate-800 rounded-full overflow-hidden">
                     <div id="progress-bar-fill" class="h-full bg-primary rounded-full transition-all duration-1000"
@@ -109,15 +119,12 @@
             </div>
         </section>
         <section
-            class="bg-white dark:bg-slate-900 rounded-[12px] p-6 shadow-sm border border-primary/5 flex flex-col items-center text-center">
-            <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Lifetime Qur’an Completions
-            </h3>
-            <div class="flex items-baseline gap-2 mb-2">
-                <span id="lifetime-completions-count"
-                    class="text-5xl font-extrabold text-primary dark:text-slate-100 font-display">0</span>
-                <span class="text-sm font-semibold text-slate-400">Completed</span>
-            </div>
-            <p class="text-xs text-slate-500 font-medium">Number of times you have finished the Qur’an.</p>
+            class="bg-white dark:bg-slate-900 rounded-[12px] p-4 shadow-sm border border-primary/5 flex items-center justify-center gap-3">
+            <span class="material-symbols-outlined text-emerald-500 font-bold">check_circle</span>
+            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                Lifetime completions: <span id="lifetime-completions-count"
+                    class="font-bold text-slate-800 dark:text-slate-100 skeleton-text w-12">0</span>
+            </p>
         </section>
         <section>
             <button id="record-reading-btn" onclick="openModal()"
@@ -141,12 +148,14 @@
                 </button>
             </div>
             <div id="streak-container"
-                class="bg-accent-soft/50 dark:bg-primary/10 border border-primary/10 rounded-xl p-4 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <img src="../assets/images/fire_animation.gif" alt="streak fire" class="w-6 h-6 object-contain" />
-                    <span id="streak-text" class="font-medium">0 Day Streak</span>
+                class="bg-accent-soft/50 dark:bg-primary/10 border border-primary/10 rounded-xl p-4 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                    <img src="../assets/images/fire_animation.gif" alt="streak fire"
+                        class="w-6 h-6 object-contain shrink-0" />
+                    <span id="streak-text" class="font-medium skeleton-text w-24 whitespace-nowrap truncate">0 Day
+                        Streak</span>
                 </div>
-                <span class="text-xs font-bold text-primary uppercase">Keep it up!</span>
+                <span class="text-[10px] font-bold text-primary uppercase shrink-0">Keep it up!</span>
             </div>
         </section>
     </main>
@@ -155,7 +164,7 @@
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal()"></div>
         <div class="relative bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl shadow-2xl p-8 space-y-6">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-bold font-amiri">Record Reading</h3>
+                <h3 class="text-xl font-bold">Record Reading</h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                     <span class="material-symbols-outlined">close</span>
                 </button>
@@ -164,12 +173,19 @@
                 <div class="space-y-2">
                     <label class="text-sm font-medium text-slate-500">Last Finished Page</label>
                     <input type="number" id="start-page" readonly
-                        class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-3 px-4 font-bold text-slate-400 cursor-not-allowed">
+                        class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-3 px-4 font-medium text-slate-400 cursor-not-allowed">
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium text-slate-500">I finished on page:</label>
-                    <input type="number" id="end-page" required min="1" max="600"
-                        class="w-full bg-accent-soft/30 dark:bg-primary/5 border-2 border-primary/10 focus:border-primary rounded-xl py-3 px-4 font-bold text-lg outline-none transition-all">
+                    <input type="number" id="end-page" required min="1" max="604" inputmode="numeric"
+                        class="w-full bg-accent-soft/30 dark:bg-primary/5 border-2 border-primary/10 focus:border-primary rounded-xl py-3 px-4 font-medium text-lg outline-none transition-all">
+                    <p id="page-error-msg"
+                        class="text-xs text-red-500 mt-1.5 hidden items-center gap-1 font-semibold animate-in slide-in-from-top-1 duration-200">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span class="msg-text"></span>
+                    </p>
                 </div>
                 <button type="submit"
                     class="w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-opacity-90 active:scale-[0.98] transition-all">

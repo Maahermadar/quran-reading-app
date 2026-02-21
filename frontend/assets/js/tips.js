@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchTips() {
     try {
         const data = await apiFetch('/tips/');
-        document.getElementById('daily-tip-text').textContent = `"${data.daily_tip}"`;
+        const tipEl = document.getElementById('daily-tip-text');
+        tipEl.textContent = `"${data.daily_tip}"`;
+        tipEl.classList.remove('skeleton-text', 'skeleton');
     } catch (err) {
         console.error('Failed to fetch tips:', err);
     }
@@ -111,6 +113,8 @@ async function fetchForecast() {
 
             bar.style.width = '0%';
         }
+
+        daysText.classList.remove('skeleton-text', 'skeleton');
     } catch (err) {
         console.error('Failed to fetch forecast:', err);
     }

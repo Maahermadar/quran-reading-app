@@ -18,8 +18,10 @@ def migrate():
         print("Ensuring is_cycle_completed exists on lifetime_stats...")
         cur.execute("ALTER TABLE lifetime_stats ADD COLUMN IF NOT EXISTS is_cycle_completed INTEGER DEFAULT 0;")
 
-        print("Ensuring avatar_url exists on users...")
+        print("Ensuring avatar_url and completion stats exist on users...")
         cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR;")
+        cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS lifetime_completions INTEGER DEFAULT 0;")
+        cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_cycle_completed INTEGER DEFAULT 0;")
 
         conn.commit()
         cur.close()

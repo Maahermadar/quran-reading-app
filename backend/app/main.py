@@ -12,8 +12,8 @@ app = FastAPI(title="Quran Reading Tracker API")
 UPLOAD_DIR = "uploads/avatars"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="uploads"), name="static")
+# Mount static files (Disabled - avatars moved to Cloudflare Assets)
+# app.mount("/static", StaticFiles(directory="uploads"), name="static")
 
 # Configure CORS
 app.add_middleware(

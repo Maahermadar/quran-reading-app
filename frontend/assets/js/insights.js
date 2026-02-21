@@ -12,11 +12,31 @@ async function fetchInsights() {
 }
 
 function updateUI(data) {
-    document.getElementById('avg-pages-text').textContent = data.avg_pages_7_days;
-    document.getElementById('current-streak-text').textContent = data.streak;
-    document.getElementById('est-days-text').textContent = data.est_days_for_100_pages;
-    document.getElementById('best-time-text').textContent = data.best_time;
-    document.getElementById('weekly-total-text').textContent = data.weekly_total;
+    const avgText = document.getElementById('avg-pages-text');
+    const streakText = document.getElementById('current-streak-text');
+    const estText = document.getElementById('est-days-text');
+    const bestText = document.getElementById('best-time-text');
+    const weeklyText = document.getElementById('weekly-total-text');
+
+    avgText.textContent = data.avg_pages_7_days;
+    avgText.parentNode.classList.remove('skeleton-text', 'skeleton');
+    // Ensure parent is flex for side-by-side
+    avgText.parentNode.classList.add('flex', 'items-baseline', 'gap-1', 'whitespace-nowrap');
+
+    streakText.textContent = data.streak;
+    streakText.parentNode.classList.remove('skeleton-text', 'skeleton');
+    streakText.parentNode.classList.add('flex', 'items-baseline', 'gap-1', 'whitespace-nowrap');
+
+    estText.textContent = data.est_days_for_100_pages;
+    estText.parentNode.classList.remove('skeleton-text', 'skeleton');
+    estText.parentNode.classList.add('flex', 'items-baseline', 'gap-1', 'whitespace-nowrap');
+
+    bestText.textContent = data.best_time;
+    bestText.classList.remove('skeleton-text', 'skeleton');
+
+    weeklyText.textContent = data.weekly_total;
+    weeklyText.parentNode.classList.remove('skeleton-text', 'skeleton');
+    weeklyText.parentNode.classList.add('flex', 'items-baseline', 'gap-1', 'whitespace-nowrap');
 
     // Render Weekly Chart
     const chartContainer = document.getElementById('weekly-chart-container');

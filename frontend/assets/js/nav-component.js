@@ -39,6 +39,24 @@ function renderBottomNav() {
 
     navContainer.innerHTML = navContent;
     document.body.appendChild(navContainer);
+
+    // Pre-fetch navigation links on hover/touch
+    navContainer.querySelectorAll('a').forEach(link => {
+        const prefetch = () => {
+            const href = link.getAttribute('href');
+            if (href && !window.location.pathname.includes(href)) {
+                const linkTag = document.createElement('link');
+                linkTag.rel = 'prefetch';
+                linkTag.href = href;
+                document.head.appendChild(linkTag);
+                // Only prefetch once per link
+                link.removeEventListener('mouseenter', prefetch);
+                link.removeEventListener('touchstart', prefetch);
+            }
+        };
+        link.addEventListener('mouseenter', prefetch, { passive: true });
+        link.addEventListener('touchstart', prefetch, { passive: true });
+    });
 }
 
 // Ensure DOM is loaded before rendering

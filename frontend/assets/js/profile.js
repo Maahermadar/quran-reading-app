@@ -16,8 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchProfile() {
     try {
         const data = await apiFetch('/auth/me');
-        document.getElementById('user-name-text').textContent = data.name;
-        document.getElementById('user-email-text').textContent = data.email;
+        const nameEl = document.getElementById('user-name-text');
+        const emailEl = document.getElementById('user-email-text');
+        nameEl.textContent = data.name;
+        nameEl.classList.remove('skeleton-text', 'skeleton', 'w-32');
+
+        emailEl.textContent = data.email;
+        emailEl.classList.remove('skeleton-text', 'skeleton', 'w-48');
 
         // Show avatar image or initial
         applyAvatarToProfilePage(data);
@@ -32,7 +37,10 @@ function applyAvatarToProfilePage(data) {
     if (!profileAvatar) return;
 
     if (data.avatar_url) {
-        profileAvatar.style.backgroundImage = `url(${API_BASE_URL}${data.avatar_url})`;
+        const avatarId = data.avatar_url.split('/').pop().split('.')[0];
+        const cloudflareAvatarUrl = `${ASSETS_BASE_URL}/assets/avatars/${avatarId}.webp`;
+
+        profileAvatar.style.backgroundImage = `url(${cloudflareAvatarUrl})`;
         profileAvatar.style.backgroundSize = 'cover';
         profileAvatar.style.backgroundPosition = 'center';
         if (initial) initial.style.display = 'none';

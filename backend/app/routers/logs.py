@@ -13,12 +13,23 @@ def create_reading_log(
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    # Step 0 — Strict Validation
+    # Determine effective start page
+    last_log = db.query(models.ReadingLog).filter(models.ReadingLog.user_id == current_user.id).order_by(models.ReadingLog.created_at.desc()).first()
+    
+    # Effective starting page for validation
+    effective_start = 1
+    if last_log and current_user.is_cycle_completed == 0:
+        effective_start = last_log.end_page
+
+    if log_in.end_page < 1 or log_in.end_page > 604:
+        raise HTTPException(status_code=400, detail="Page must be between 1 and 604")
+        
+    if log_in.end_page < effective_start:
+        raise HTTPException(status_code=400, detail=f"End page cannot be less than last finished page ({effective_start})")
+
     # Step 1 — Detect completion FROM THIS LOG ONLY
-    # A log is a completion if: end_page < start_page (wrap-around) OR end_page == 600
-    completed = (
-        log_in.end_page < log_in.start_page
-        or log_in.end_page == 600
-    )
+    completed = log_in.end_page == 604
 
     # Create the log first (not yet committed)
     new_log = models.ReadingLog(
@@ -29,27 +40,15 @@ def create_reading_log(
     )
     db.add(new_log)
 
-    # Get or create lifetime stats
-    stats = db.query(models.LifetimeStat).filter(
-        models.LifetimeStat.user_id == current_user.id
-    ).first()
-    if not stats:
-        stats = models.LifetimeStat(
-            user_id=current_user.id,
-            total_completions=0,
-            is_cycle_completed=0
-        )
-        db.add(stats)
-
     # Step 2 — Increment only if this is a completion AND not already counted
     if completed and new_log.completion_counted == 0:
-        stats.total_completions += 1
-        stats.is_cycle_completed = 1
+        current_user.lifetime_completions += 1
+        current_user.is_cycle_completed = 1
         new_log.completion_counted = 1  # Mark this log as counted — idempotency guard
 
     # Step 3 — If NOT a completion but previous cycle was completed, reset the flag
-    elif not completed and stats.is_cycle_completed == 1:
-        stats.is_cycle_completed = 0
+    elif not completed and current_user.is_cycle_completed == 1:
+        current_user.is_cycle_completed = 0
 
     db.commit()
     db.refresh(new_log)
@@ -71,7 +70,7 @@ def get_last_page(
         return {"last_page": 1}
     
     # If the user finished Exactly on page 600, the next cycle starts at page 1
-    if last_log.end_page == 600:
+    if last_log.end_page == 604:
         return {"last_page": 1}
         
     return {"last_page": last_log.end_page}

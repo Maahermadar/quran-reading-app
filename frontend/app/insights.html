@@ -43,12 +43,8 @@
 
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
     <!-- Header -->
-    <header
-        class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex justify-between items-center border-b border-primary/10">
-        <h1 class="text-3xl font-bold text-primary dark:text-slate-100">Insights</h1>
-        <!-- Tailwind Safelist for Dynamic Nav -->
-        <div class="hidden uppercase font-bold font-semibold tracking-widest text-primary text-slate-400 w-1.5 h-1.5">
-        </div>
+    <header class="px-6 py-4 flex justify-between items-center mb-2">
+        <h1 class="text-xl font-extrabold text-slate-800 dark:text-slate-100">Insights</h1>
         <div
             class="js-avatar size-10 rounded-full border-2 border-primary/20 overflow-hidden bg-white flex items-center justify-center">
             <svg class="w-6 h-6 text-primary/40" fill="currentColor" viewBox="0 0 24 24"
@@ -58,6 +54,7 @@
             </svg>
         </div>
     </header>
+    <div class="mx-6 section-header-divider"></div>
     <main class="flex-1 px-6 pb-32">
         <!-- Chart Section -->
         <section class="mt-6">
@@ -95,9 +92,10 @@
                     <img src="../assets/images/fire_animation.gif" alt="streak fire"
                         class="w-6 h-6 object-contain mb-2" />
                     <p class="text-xs font-medium text-slate-500 uppercase tracking-tight">Current Streak</p>
-                    <p class="text-2xl font-bold text-primary dark:text-primary mt-1"><span
-                            id="current-streak-text">0</span> <span
-                            class="text-sm font-normal text-slate-400">days</span></p>
+                    <p class="text-2xl font-bold text-primary dark:text-primary mt-1 skeleton-text whitespace-nowrap">
+                        <span id="current-streak-text">0</span> <span
+                            class="text-sm font-normal text-slate-400">days</span>
+                    </p>
                 </div>
                 <!-- Estimated Days for 100 Pages -->
                 <div class="bg-white dark:bg-slate-900/50 p-5 rounded-xl shadow-sm border border-primary/5">
@@ -111,7 +109,8 @@
                 <div class="bg-white dark:bg-slate-900/50 p-5 rounded-xl shadow-sm border border-primary/5">
                     <span class="material-symbols-outlined text-blue-500 mb-2">light_mode</span>
                     <p class="text-xs font-medium text-slate-500 uppercase tracking-tight">Best Time</p>
-                    <p id="best-time-text" class="text-lg font-bold text-primary dark:text-primary mt-1 leading-tight">
+                    <p id="best-time-text"
+                        class="text-lg font-bold text-primary dark:text-primary mt-1 leading-tight skeleton-text w-24">
                         Calc...</p>
                 </div>
             </div>

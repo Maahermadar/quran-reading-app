@@ -1,7 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0&display=block');
 
-body {
+* {
     font-family: 'Montserrat', sans-serif;
+}
+
+/* Skeleton Loading Styles */
+.skeleton {
+    background: #e2e8f0;
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    border-radius: 5px;
+    background-size: 200% 100%;
+    animation: 1.5s shine linear infinite;
+    color: transparent !important;
+    border: none !important;
+}
+
+.dark .skeleton {
+    background: #1e293b;
+    background: linear-gradient(110deg, #1e293b 8%, #334155 18%, #1e293b 33%);
+    background-size: 200% 100%;
+}
+
+@keyframes shine {
+    from {
+        background-position-x: 200%;
+    }
+
+    to {
+        background-position-x: -200%;
+    }
+}
+
+.skeleton-text {
+    height: 1em;
+    width: 100%;
+    display: inline-block;
 }
 
 .font-amiri {
@@ -14,4 +47,19 @@ body {
 
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Header Standardization */
+.section-header-divider {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem !important;
+}
+
+.dark .section-header-divider {
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.section-header-standard {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
 }

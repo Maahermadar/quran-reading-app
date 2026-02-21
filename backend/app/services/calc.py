@@ -1,12 +1,12 @@
 from datetime import datetime
 import math
 
-TOTAL_PAGES = 600
+TOTAL_PAGES = 604
 
 def calculate_pages_read(start: int, end: int) -> int:
     """
-    Circular 1..600 logic.
-    If end < start, it means user wrapped past 600.
+    Circular 1..604 logic.
+    If end < start, it means user wrapped past 604.
     """
     if end >= start:
         return end - start + 1
@@ -19,17 +19,13 @@ def completions_in_log(start: int, end: int) -> int:
     """
     if end < start:
         return 1
-    if end == TOTAL_PAGES and start <= TOTAL_PAGES:
+    if end == TOTAL_PAGES:
         return 1
     return 0
 
 def get_juz_from_page(page: int) -> int:
-    """
-    30 Juz, 20 pages each.
-    """
-    if page <= 0: return 1
-    if page > TOTAL_PAGES: return 30
-    return ((page - 1) // 20) + 1
+    from . import surah_service
+    return surah_service.get_juz_for_page(page)
 
 def calculate_progress_percentage(page: int) -> float:
     return round((page / TOTAL_PAGES) * 100, 1)

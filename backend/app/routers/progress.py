@@ -15,17 +15,21 @@ def get_progress(
     last_log = db.query(models.ReadingLog).filter(models.ReadingLog.user_id == current_user.id).order_by(models.ReadingLog.created_at.desc()).first()
     
     current_page = last_log.end_page if last_log else 1
-    juz = calc.get_juz_from_page(current_page)
-    progress_pct = calc.calculate_progress_percentage(current_page)
     
-    stats = db.query(models.LifetimeStat).filter(models.LifetimeStat.user_id == current_user.id).first()
-    completions = stats.total_completions if stats else 0
+    # Madani Mushaf Logic
+    from ..services import surah_service
+    juz = surah_service.get_juz_for_page(current_page)
+    surah_info = surah_service.get_surah_info_for_page(current_page)
+    
+    progress_pct = calc.calculate_progress_percentage(current_page)
     
     return {
         "current_page": current_page,
         "juz": juz,
+        "surah_name_en": surah_info["name_en"] if surah_info else "N/A",
+        "surah_name_ar": surah_info["name_ar"] if surah_info else "N/A",
         "progress_percentage": progress_pct,
-        "pages_left": 600 - current_page if current_page <= 600 else 0,
-        "lifetime_completions": completions,
-        "is_cycle_completed": bool(stats.is_cycle_completed) if stats else False
+        "pages_left": 604 - current_page if current_page <= 604 else 0,
+        "lifetime_completions": current_user.lifetime_completions,
+        "is_cycle_completed": bool(current_user.is_cycle_completed)
     }

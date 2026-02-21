@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Show UI immediately. Skeletons are visible by default in HTML.
+    // Individual update functions will check for cache during their execution.
+
+    // Trigger parallel fetches without awaiting them to unblock UI
     fetchProgress();
     fetchGoals();
     fetchStreak();
 
-    // Attach form handlers exactly once here — no inline onclick duplicates
+    // Attach form handlers
     const readingForm = document.getElementById('reading-form');
     if (readingForm) {
         readingForm.addEventListener('submit', handleReadingSubmit);
@@ -65,12 +69,12 @@ async function fetchGoals() {
             container.classList.remove('hidden');
             noGoal.classList.add('hidden');
             container.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary text-xl">flag</span>
-                        <p class="font-bold text-slate-800 dark:text-slate-100">${data.target_pages} Pages in ${data.target_days} Days</p>
+                <div class="flex justify-between items-center gap-4 flex-nowrap">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="material-symbols-outlined text-primary text-xl shrink-0">flag</span>
+                        <p class="font-bold text-slate-800 dark:text-slate-100 truncate">${data.target_pages} Pages in ${data.target_days} Days</p>
                     </div>
-                    <span class="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-tight">${data.progress_percentage}% DONE</span>
+                    <span class="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-tight shrink-0 whitespace-nowrap">${data.progress_percentage}% DONE</span>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-accent-soft/30 dark:bg-primary/5 p-4 rounded-xl border border-primary/5 text-center">
@@ -104,19 +108,60 @@ async function fetchGoals() {
 async function fetchStreak() {
     try {
         const data = await apiFetch('/insights/');
-        document.getElementById('streak-text').textContent = `${data.streak} Day Streak`;
+        const streakEl = document.getElementById('streak-text');
+        streakEl.textContent = `${data.streak} Day Streak`;
+        streakEl.classList.remove('skeleton-text', 'skeleton', 'w-24');
     } catch (err) {
         console.error('Failed to fetch streak:', err);
     }
 }
 
 function updateProgressUI(data) {
-    document.getElementById('current-juz-text').textContent = `Juz ${data.juz}`;
-    document.getElementById('progress-percentage-badge').textContent = `${data.progress_percentage}% Done`;
-    document.getElementById('pages-read-text').textContent = `Page ${data.current_page} of 600`;
-    document.getElementById('pages-left-text').textContent = `${data.pages_left} pages left`;
-    document.getElementById('progress-bar-fill').style.width = `${data.progress_percentage}%`;
-    document.getElementById('lifetime-completions-count').textContent = data.lifetime_completions;
+    const juzText = document.getElementById('current-juz-text');
+    const surahEnText = document.getElementById('surah-name-en-text');
+    const surahArText = document.getElementById('surah-name-ar-text');
+    const progressBadge = document.getElementById('progress-percentage-badge');
+    const pagesReadText = document.getElementById('pages-read-text');
+    const pagesLeftText = document.getElementById('pages-left-text');
+    const lifetimeCount = document.getElementById('lifetime-completions-count');
+
+    if (juzText) {
+        juzText.textContent = `Juz ${data.juz}`;
+        juzText.classList.remove('skeleton-text', 'skeleton', 'w-24');
+    }
+
+    if (surahEnText) {
+        surahEnText.textContent = data.surah_name_en;
+        surahEnText.classList.remove('skeleton-text', 'skeleton', 'w-32');
+    }
+
+    if (surahArText) {
+        surahArText.textContent = data.surah_name_ar;
+        surahArText.classList.remove('skeleton-text', 'skeleton', 'w-24');
+    }
+
+    if (progressBadge) {
+        progressBadge.textContent = `${data.progress_percentage}% Done`;
+        progressBadge.classList.remove('skeleton-text', 'skeleton');
+    }
+
+    if (pagesReadText) {
+        pagesReadText.textContent = `Page ${data.current_page} of 604`;
+        pagesReadText.classList.remove('skeleton-text', 'skeleton', 'w-24');
+    }
+
+    if (pagesLeftText) {
+        pagesLeftText.textContent = `${data.pages_left} pages left`;
+        pagesLeftText.classList.remove('skeleton-text', 'skeleton', 'w-24');
+    }
+
+    const fill = document.getElementById('progress-bar-fill');
+    if (fill) fill.style.width = `${data.progress_percentage}%`;
+
+    if (lifetimeCount) {
+        lifetimeCount.textContent = data.lifetime_completions;
+        lifetimeCount.classList.remove('skeleton-text', 'skeleton', 'w-12');
+    }
 
     // Show/hide Quran completion banner based on backend state
     const completionMsg = document.getElementById('completion-success-message');
@@ -133,18 +178,61 @@ function openModal() {
     const modal = document.getElementById('recording-modal');
     modal.classList.remove('hidden');
 
-    // Always clear the fields first — do NOT pre-fill when cycle just completed
     const startInput = document.getElementById('start-page');
     const endInput = document.getElementById('end-page');
+    const errorMsg = document.getElementById('page-error-msg');
+    const submitBtn = document.querySelector('#reading-form button[type="submit"]');
+
+    // Initial state
     startInput.value = '';
     endInput.value = '';
+    endInput.classList.remove('border-red-500');
+    if (errorMsg) errorMsg.classList.add('hidden');
+    submitBtn.disabled = true;
 
-    // Pre-fill start page from backend (last page read) regardless of state
-    apiFetch('/logs/last-page').then(data => {
-        startInput.value = data.last_page;
-        endInput.value = '';          // end-page stays empty — user must type it
+    // Fetch progress to determine Effective Last Page
+    apiFetch('/progress/').then(progress => {
+        // If cycle completed, effective last page is 1
+        const effectiveLastPage = progress.is_cycle_completed ? 1 : progress.current_page;
+
+        startInput.value = effectiveLastPage;
+        endInput.min = effectiveLastPage;
+        endInput.max = 604;
+        endInput.placeholder = `Min ${effectiveLastPage}`;
+
+        // Setup validation listener
+        const validate = () => {
+            const val = parseInt(endInput.value);
+            let errorMessage = "";
+
+            if (!endInput.value) {
+                errorMessage = ""; // Button remains disabled (opacity logic below)
+            } else if (isNaN(val) || val < effectiveLastPage) {
+                errorMessage = `Please enter a page starting from ${effectiveLastPage}`;
+            } else if (val > 604) {
+                errorMessage = "The maximum page in this Mushaf is 604";
+            }
+
+            if (errorMessage) {
+                const textSpan = errorMsg.querySelector('.msg-text');
+                if (textSpan) textSpan.textContent = errorMessage;
+                errorMsg.classList.remove('hidden');
+                errorMsg.classList.add('flex');
+                endInput.classList.add('border-red-500', 'bg-red-50/50', 'dark:bg-red-900/10');
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.3";
+            } else {
+                errorMsg.classList.add('hidden');
+                errorMsg.classList.remove('flex');
+                endInput.classList.remove('border-red-500', 'bg-red-50/50', 'dark:bg-red-900/10');
+                submitBtn.disabled = !endInput.value;
+                submitBtn.style.opacity = endInput.value ? "1" : "0.3";
+            }
+        };
+
+        endInput.oninput = validate;
         endInput.focus();
-    }).catch(err => console.error(err));
+    }).catch(err => console.error('Failed to pre-fill modal:', err));
 }
 
 function closeModal() {

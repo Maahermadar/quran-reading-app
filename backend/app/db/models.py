@@ -18,6 +18,8 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     password_hash = Column(String)
     avatar_url = Column(String, nullable=True)
+    lifetime_completions = Column(Integer, default=0)
+    is_cycle_completed = Column(Integer, default=0) # 0 or 1
     created_at = Column(DateTime, default=datetime.utcnow)
 
     logs = relationship("ReadingLog", back_populates="user")

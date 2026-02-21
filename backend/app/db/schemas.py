@@ -12,6 +12,8 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     id: int
     avatar_url: Optional[str] = None
+    lifetime_completions: int = 0
+    is_cycle_completed: int = 0
     created_at: datetime
     class Config:
         from_attributes = True
